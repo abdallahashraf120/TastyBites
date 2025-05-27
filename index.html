@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Loading</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #f1faee;
+            --accent-color: #a8dadc;
+            --dark-color: #1d3557;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .loader-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loader-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            animation: progress 2.5s linear infinite;
+        }
+        
+        @keyframes progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-family: 'Pacifico', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cooking-loader {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+        }
+        
+        .pan {
+            width: 120px;
+            height: 25px;
+            background: #6c757d;
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .handle {
+            width: 50px;
+            height: 10px;
+            background: #495057;
+            position: absolute;
+            bottom: 40px;
+            right: 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .food {
+            width: 40px;
+            height: 20px;
+            background: #e9c46a;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            bottom: 50px;
+            left: 60px;
+            animation: flip 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center bottom;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .spatula {
+            width: 50px;
+            height: 6px;
+            background: #adb5bd;
+            position: absolute;
+            bottom: 70px;
+            right: 30px;
+            transform: rotate(-20deg);
+            animation: stir 1.5s infinite ease-in-out;
+            border-radius: 3px;
+        }
+        
+        .spatula::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #adb5bd;
+            border-radius: 3px;
+            top: -5px;
+            left: -5px;
+            transform: rotate(45deg);
+        }
+        
+        .steam {
+            position: absolute;
+            width: 10px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            bottom: 80px;
+            left: 75px;
+            animation: steam 2s infinite ease-out;
+        }
+        
+        .steam:nth-child(2) {
+            left: 90px;
+            animation-delay: 0.5s;
+        }
+        
+        .steam:nth-child(3) {
+            left: 60px;
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes flip {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            50% { transform: rotate(30deg) translateY(-15px); }
+        }
+        
+        @keyframes stir {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+        
+        @keyframes steam {
+            0% { 
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            100% { 
+                transform: translateY(-50px) scale(0.5); 
+                opacity: 0;
+            }
+        }
+        
+        .loading-text {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-top: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .dots::after {
+            content: '';
+            animation: dots 1.8s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+        
+        .hint-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loader-container">
+        <div class="logo">TastyBites</div>
+        
+        <div class="cooking-loader">
+            <div class="pan"></div>
+            <div class="handle"></div>
+            <div class="food"></div>
+            <div class="spatula"></div>
+            <div class="steam"></div>
+            <div class="steam"></div>
+            <div class="steam"></div>
+        </div>
+        
+        <div class="loading-text">Cooking up something delicious<span class="dots"></span></div>
+        <div class="hint-text">Good food takes time...</div>
+    </div>
+
+    <script>
+        // Redirect after delay or when content is ready
+        setTimeout(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectTo = urlParams.get('redirect') || 'home.html';
+            
+            
+            // Add a smooth transition effect
+            document.querySelector('.loader-container').style.opacity = '0';
+            document.querySelector('.loader-container').style.transform = 'translateY(-20px)';
+            document.querySelector('.loader-container').style.transition = 'all 0.5s ease';
+            
+            setTimeout(() => {
+                window.location.href = redirectTo;
+            }, 500);
+        }, 3000);
+    </script>
+</body>
+</html>

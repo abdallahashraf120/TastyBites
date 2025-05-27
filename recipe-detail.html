@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Recipe Detail</title>
+    <link rel="shortcut icon" href="./assests/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .recipe-header {
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: flex-end;
+            color: white;
+            position: relative;
+            margin-bottom: 40px;
+        }
+        .recipe-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .recipe-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 30px;
+            width: 100%;
+        }
+        .recipe-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .ingredients-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .ingredients-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            padding: 100px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #recipe-container {
+            flex: 1 0 auto;
+        }
+        footer {
+            flex-shrink: 0;
+        }
+        .btn,
+        .btn:focus {
+            background-color: #dc3545 !important; /* Bootstrap's 'btn-danger' red */
+            border-color: #dc3545 !important;
+            color: #fff !important;
+        }
+        .btn:hover,
+        .btn:active {
+            background-color: #b52a37 !important; /* A darker red for hover/active */
+            border-color: #b52a37 !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <img src="./assests/logo.png" style="width: 40px; cursor: pointer; padding-right: 10px;" alt="" class="nav_logo" />
+            <a class="navbar-brand" href="home.html">TastyBites</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="recipe-detail.html">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe Content -->
+    <div id="recipe-container">
+        <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2025 TastyBites. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipeContainer = document.getElementById('recipe-container');
+            
+            // Get recipe ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const recipeId = urlParams.get('id');
+            
+            if (recipeId) {
+                // Fetch recipe details from Forkify API
+                fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${recipeId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Recipe not found');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const recipe = data.data.recipe;
+                        
+                        // Create recipe header with image background
+                        const recipeHeader = `
+                            <div class="recipe-header" style="background-image: url('${recipe.image_url}')">
+                                <div class="recipe-header-content">
+                                    <h1 class="display-4 fw-bold">${recipe.title}</h1>
+                                    <p class="lead">By ${recipe.publisher}</p>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Create recipe details
+                        const recipeDetails = `
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="recipe-info">
+                                            <h4>Recipe Info</h4>
+                                            <p><strong>Prep Time:</strong> ${recipe.cooking_time} minutes</p>
+                                            <p><strong>Servings:</strong> ${recipe.servings}</p>
+                                            <a href="${recipe.source_url}" target="_blank" class="btn btn-primary mt-2">View Original Recipe</a>
+                                        </div>
+                                        
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Ingredients</h4>
+                                                <ul class="ingredients-list">
+                                                    ${recipe.ingredients.map(ing => 
+                                                        `<li>${ing.quantity ? ing.quantity : ''} ${ing.unit} ${ing.description}</li>`
+                                                    ).join('')}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Instructions</h4>
+                                                <p>For detailed cooking instructions, please visit the original recipe source.</p>
+                                                <a href="${recipe.source_url}" target="_blank" class="btn btn-primary">View Full Instructions</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Combine and insert into container
+                        recipeContainer.innerHTML = recipeHeader + recipeDetails;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching recipe:', error);
+                        recipeContainer.innerHTML = `
+                            <div class="container my-5">
+                                <div class="alert alert-danger">
+                                    Error loading recipe: ${error.message}
+                                </div>
+                                <div class="text-center">
+                                    <a href="menu.html" class="btn btn-primary">Back to Menu</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+            } else {
+                recipeContainer.innerHTML = `
+                    <div class="container my-5">
+                        <div class="alert alert-warning">
+                            No recipe specified. Please select a recipe from the menu.
+                        </div>
+                        <div class="text-center">
+                            <a href="menu.html" class="btn btn-primary">Browse Recipes</a>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

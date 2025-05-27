@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Menu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        
+        .dish-card {
+            height: 100%;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+        .dish-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .dish-card .card-body {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .dish-card .btn {
+            margin-top: auto;
+        }
+        .btn,
+        .btn:focus {
+            background-color: #dc3545 !important; 
+            border-color: #dc3545 !important;
+            color: #fff !important;
+        }
+        .btn:hover,
+        .btn:active {
+            background-color: #b52a37 !important; 
+            border-color: #b52a37 !important;
+            color: #fff !important;
+        }
+        #goUpBtn {
+            opacity: 0;
+            pointer-events: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 99;
+            width: 56px;
+            height: 56px;
+            font-size: 2rem;
+            border: none;
+            outline: none;
+            background-color: #dc3545;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            transition: background 0.2s, box-shadow 0.2s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #goUpBtn.visible {
+            opacity: 0.95;
+            pointer-events: auto;
+        }
+        #goUpBtn:hover {
+            background-color: #b52a37;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <img src="./assests/logo.png" style="width: 40px; cursor: pointer; padding-right: 10px;" alt="" class="nav_logo" />
+            <a class="navbar-brand" href="home.html">TastyBites</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="recipe-detail.html">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Header -->
+    <section class="menu-header">
+        <!-- ... (keep your existing header) ... -->
+    </section>
+
+    <!-- Search Section -->
+    <div class="container search-container py-4 px-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form id="search-form" class="d-flex">
+                    <input class="form-control me-2" type="search" id="search-input" placeholder="Try 'pizza', 'pasta', 'salad'..." aria-label="Search">
+                    <button class="btn btn-danger" type="submit">Search</button>
+                </form>
+                <div class="text-center mt-2">
+                    <small class="text-muted">Popular searches: pizza, pasta, salad, chicken</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Content -->
+    <div class="container">
+        <div class="row" id="recipes-container">
+            <!-- Default recipes will load here initially -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2025 TastyBites. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Go Up Button -->
+    <button id="goUpBtn" title="Go to top">
+        &uarr;
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipesContainer = document.getElementById('recipes-container');
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+            
+            // Load default recipes when page loads
+            loadDefaultRecipes();
+            
+            // Search form handler
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    showLoader();
+                    fetchRecipes(searchTerm);
+                }
+            });
+            
+            // Function to show loading state
+            function showLoader() {
+                recipesContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Finding delicious recipes...</p>
+                    </div>
+                `;
+            }
+            
+            // Function to load default recipes
+            function loadDefaultRecipes() {
+                showLoader();
+                
+                // These are reliable search terms that work with Forkify API
+                const defaultSearches = ['pizza', 'pasta', 'salad', 'chicken'];
+                
+                // Fetch first 3 recipes from each default search
+                Promise.all(defaultSearches.map(term => 
+                    fetch(`https://forkify-api.herokuapp.com/api/v2/recipes?search=${term}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network error');
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.results === 0) throw new Error('No results');
+                            // Get up to 3 recipes for each term
+                            return data.data.recipes.slice(0, 3);
+                        })
+                        .catch(error => {
+                            console.error(`Error loading ${term}:`, error);
+                            return [];
+                        })
+                ))
+                .then(results => {
+                    // Flatten the array of arrays
+                    const recipes = results.flat();
+                    displayRecipes(recipes.filter(recipe => recipe !== null));
+                })
+                .catch(error => {
+                    console.error('Error loading default recipes:', error);
+                    showError();
+                });
+            }
+            
+            // Function to fetch recipes based on search term
+            function fetchRecipes(query) {
+                fetch(`https://forkify-api.herokuapp.com/api/v2/recipes?search=${query}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network error');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.results === 0) {
+                            showNoResults(query);
+                        } else {
+                            displayRecipes(data.data.recipes);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching recipes:', error);
+                        showError();
+                    });
+            }
+            
+            // Function to display recipes in the container
+            function displayRecipes(recipes) {
+                if (recipes.length === 0) {
+                    showNoResults();
+                    return;
+                }
+                
+                recipesContainer.innerHTML = '';
+                
+                recipes.forEach(recipe => {
+                    const recipeCard = `
+                        <div class="col-md-4 mb-4">
+                            <div class="card dish-card h-100">
+                                <img src="${recipe.image_url}" class="card-img-top" alt="${recipe.title}" onerror="this.src='https://via.placeholder.com/300x200?text=Recipe+Image'">
+                                <div class="card-body">
+                                    <h5 class="card-title">${recipe.title}</h5>
+                                    <p class="card-text">${recipe.publisher}</p>
+                                    <a href="recipe-detail.html?id=${recipe.id}" class="btn btn-danger mt-auto">View Recipe</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    recipesContainer.innerHTML += recipeCard;
+                });
+            }
+            
+            // Function to show no results message
+            function showNoResults(query = '') {
+                recipesContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="alert alert-warning">
+                            ${query ? `No recipes found for "${query}".` : 'No recipes found.'}
+                        </div>
+                        <p>Try searching for: pizza, pasta, salad, or chicken</p>
+                        <button class="btn btn-danger" onclick="location.reload()">Show Default Recipes</button>
+                    </div>
+                `;
+            }
+            
+            // Function to show error message
+            function showError() {
+                recipesContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="alert alert-danger">
+                            Error loading recipes. Please try again later.
+                        </div>
+                        <button class="btn btn-danger" onclick="location.reload()">Reload Page</button>
+                    </div>
+                `;
+            }
+
+            // Go Up Button functionality
+            const goUpBtn = document.getElementById('goUpBtn');
+            window.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    goUpBtn.classList.add('visible');
+                } else {
+                    goUpBtn.classList.remove('visible');
+                }
+            });
+            goUpBtn.onclick = function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+        });
+    </script>
+</body>
+</html>

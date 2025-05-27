@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Our Story</title>
+    <link rel="shortcut icon" href="./assests/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .story-header {
+            background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5') no-repeat center center;
+            background-size: cover;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            margin-bottom: 60px;
+        }
+        .story-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .story-header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 20px;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: #e63946;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1.5px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 3px solid #e63946;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+            text-align: right;
+        }
+        .right {
+            left: 50%;
+            text-align: left;
+        }
+        .left::after {
+            right: -13px;
+        }
+        .right::after {
+            left: -13px;
+        }
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .team-card {
+            transition: transform 0.3s;
+            margin-bottom: 30px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .team-card:hover {
+            transform: translateY(-10px);
+        }
+        .team-card img {
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+        }
+        .values-icon {
+            font-size: 2.5rem;
+            color: #e63946;
+            margin-bottom: 15px;
+        }
+        .philosophy-section {
+            background-color: #f8f9fa;
+            padding: 80px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <img src="./assests/logo.png" style="width: 40px; cursor: pointer; padding-right: 10px;" alt="" class="nav_logo" />
+            <a class="navbar-brand" href="home.html">TastyBites</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="recipe-detail.html">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="about.html">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Story Header -->
+    <section class="story-header">
+        <div class="story-header-content">
+            <h1 class="display-3 fw-bold">Our Culinary Journey</h1>
+            <p class="lead">From a small family kitchen to your favorite dining experience</p>
+        </div>
+    </section>
+
+    <!-- Our Story -->
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center mb-5">
+                <h2 class="mb-4">The TastyBites Story</h2>
+                <p class="lead">Founded in 2005 by Chef Marco Santini, TastyBites began as a dream to bring authentic Italian flavors with a modern twist to food lovers everywhere. What started as a 12-seat trattoria in Little Italy has grown into an award-winning culinary destination.</p>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>2005</h3>
+                    <p>Chef Marco opens the first TastyBites with just four tables and a wood-fired oven imported from Naples.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>2008</h3>
+                    <p>Featured in "Best New Restaurants" by Food & Wine Magazine, putting us on the culinary map.</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>2012</h3>
+                    <p>Expanded to our current location, featuring an open kitchen and garden patio seating.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>2016</h3>
+                    <p>Received the prestigious "Golden Fork" award for culinary excellence.</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>2020</h3>
+                    <p>Launched our farm-to-table initiative, partnering with local organic farms.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>2025</h3>
+                    <p>Celebrated our 18th anniversary with a complete kitchen renovation and new seasonal menu.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Culinary Philosophy -->
+    <section class="philosophy-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2>Our Culinary Philosophy</h2>
+                    <p class="lead">The heart and soul behind every dish we create</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-center mb-4">
+                    <div class="values-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h4>Seasonal Ingredients</h4>
+                    <p>We change our menu quarterly to showcase the freshest local produce at its peak flavor.</p>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="values-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Handcrafted With Love</h4>
+                    <p>Every dish is prepared with the same care we would use cooking for our own families.</p>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="values-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h4>Traditional Techniques</h4>
+                    <p>We honor time-tested cooking methods while adding contemporary creativity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet the Team -->
+    <div class="container my-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2>Meet Our Developers</h2>
+                <p class="lead">The talented team behind your dining experience</p>
+            </div>
+        </div>
+        <div class="row justify-content-center d-flex">
+            <div class="col-md-3">
+                <div class="card team-card">
+                    <img src="./assests/abdallah.jpg" class="card-img-top" alt="Abdallah">
+                    <div class="card-body">
+                        <h5 class="card-title">Abdallah Ashraf</h5>
+                        <p class="text-muted">Developer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card team-card">
+                    <img src="./assests/adel.jpg" class="card-img-top" alt="Mohamed">
+                    <div class="card-body">
+                        <h5 class="card-title">Mohamed Adel</h5>
+                        <p class="text-muted">Developer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visit Us -->
+    <section class="bg-light py-5">
+        <div class="container text-center">
+            <h2>Visit Us</h2>
+            <p class="lead">We'd love to share our passion for food with you</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+                <p>&copy; 2025 TastyBites. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

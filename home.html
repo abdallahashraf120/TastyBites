@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TastyBites - Home</title>
+    <link rel="shortcut icon" href="./assests/logo.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836') no-repeat center center;
+            background-size: cover;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .food-card {
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+            height: 100%;
+        }
+        .food-card:hover {
+            transform: translateY(-10px);
+        }
+        .food-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .food-card .card-body {
+            display: flex;
+            flex-direction: column;
+            height: 180px;
+        }
+        .food-card .card-text {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            padding: 50px;
+        }
+        .btn,
+        .btn:focus {
+            background-color: #dc3545 !important; /* Bootstrap's 'btn-danger' red */
+            border-color: #dc3545 !important;
+            color: #fff !important;
+        }
+        .btn:hover,
+        .btn:active {
+            background-color: #b52a37 !important; /* A darker red for hover/active */
+            border-color: #b52a37 !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <img src="./assests/logo.png" style="width: 40px; cursor: pointer; padding-right: 10px;" alt="" class="nav_logo" />
+            <a class="navbar-brand" href="home.html">TastyBites</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="recipe-detail.html">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="display-3 fw-bold">Welcome to TastyBites</h1>
+            <p class="lead">Discover amazing recipes from around the world</p>
+            <a href="menu.html" class="btn btn-danger btn-lg mt-3">Explore Menu</a>
+        </div>
+    </section>
+
+    <!-- Featured Recipes -->
+    <section class="container my-5">
+        <h2 class="text-center mb-5">Featured Recipes</h2>
+        <div class="row" id="featured-recipes">
+            <div class="spinner-container">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="bg-light py-5">
+        <div class="container text-center">
+            <h2>Want to try these at home?</h2>
+            <p class="lead">Check out our detailed recipes with step-by-step instructions</p>
+            <a href="menu.html" class="btn btn-danger btn-lg">View All Recipes</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p>&copy; 2025 TastyBites. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const featuredContainer = document.getElementById('featured-recipes');
+            
+            // Array of reliable search terms that work with Forkify API
+            const reliableSearchTerms = ['pizza', 'pasta', 'cake', 'salad'];
+            
+            // Fetch first recipe for each search term
+            Promise.all(reliableSearchTerms.map(term => 
+                fetch(`https://forkify-api.herokuapp.com/api/v2/recipes?search=${term}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.results === 0) throw new Error('No results found');
+                        return data.data.recipes[0]; // Get first recipe
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching ${term}:`, error);
+                        return null;
+                    })
+            ))
+            .then(recipes => {
+                featuredContainer.innerHTML = '';
+                
+                // Filter out any null results
+                const validRecipes = recipes.filter(recipe => recipe !== null);
+                
+                if (validRecipes.length === 0) {
+                    featuredContainer.innerHTML = `
+                        <div class="col-12 text-center">
+                            <div class="alert alert-warning">
+                                Couldn't load featured recipes. Please try the <a href="menu.html">Menu page</a>.
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Display the recipes we got
+                validRecipes.forEach(recipe => {
+                    const recipeCard = `
+                        <div class="col-md-3">
+                            <div class="card food-card h-100">
+                                <img src="${recipe.image_url}" class="card-img-top" alt="${recipe.title}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${recipe.title}</h5>
+                                    <p class="card-text">${recipe.publisher}</p>
+                                    <a href="recipe-detail.html?id=${recipe.id}" class="btn btn-outline-primary mt-auto">View Recipe</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    featuredContainer.innerHTML += recipeCard;
+                });
+            })
+            .catch(error => {
+                console.error('Error loading featured recipes:', error);
+                featuredContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="alert alert-danger">
+                            Error loading recipes. Please try again later.
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
